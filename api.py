@@ -83,6 +83,11 @@ def signin():
 
     return jsonify({'message': 'Sign-in successful!'}), 200
 
+# Sign-Out (Logout) API
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('signin_page'))
 
 if __name__ == '__main__':
     app.run(debug=True)
