@@ -1,13 +1,20 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 
 app = Flask(__name__)
+
+# Secret key for session management (important for security)
+app.secret_key = 'KEY123123'
 
 # In-memory user database
 users_db = {}
 
 @app.route('/')
 def home():
-    return "Welcome to the Flask SignUp/SignIn API!"
+    # return "Welcome to the Flask SignUp/SignIn API!"
+    if 'username' not in session:
+        # Redirect to sign-in if the user is not signed in
+        return redirect(url_for('signin_page'))
+    return f"Welcome, {session['username']}! <br> <a href='/logout'>Logout</a>"
 
 # Serve Signup page
 @app.route('/signup')
@@ -70,6 +77,9 @@ def signin():
 
     if stored_password != password:
         return jsonify({'message': 'Invalid credentials!'}), 401
+    
+    # Set session variable after successful login
+    session['username'] = username
 
     return jsonify({'message': 'Sign-in successful!'}), 200
 

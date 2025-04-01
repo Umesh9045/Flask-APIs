@@ -38,6 +38,11 @@
             });
 
             const result = await response.json();
+
+            if (response.status == 200) {
+                window.location.href = '/';  // Redirect to the home page
+            }
+            
             document.getElementById("response").innerText = result.message;
         });
     </script>
